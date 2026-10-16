@@ -6,9 +6,9 @@ import {
   getConflicts,
   isBoardSolved
 } from '../validator.js';
-import { solveSudoku, countSolutions, getCandidates } from '../solver.js';
+import { solveSudoku, countSolutions } from '../solver.js';
 import { generateFullBoard, generatePuzzle } from '../generator.js';
-import { evaluateMove, checkSectorCompletion, calculateProgress } from '../evaluator.js';
+import { evaluateMove } from '../evaluator.js';
 import { CAT_EMOTIONS, MOVE_QUALITY } from '../constants.js';
 
 describe('Validator Module', () => {
@@ -36,7 +36,7 @@ describe('Validator Module', () => {
   it('detects duplicate conflicts across the board', () => {
     const board = createEmptyBoard();
     board[0][0] = 7;
-    board[0][4] = 7; // row conflict
+    board[0][4] = 7;
 
     const conflicts = getConflicts(board);
     expect(conflicts.has('0-0')).toBe(true);
@@ -82,7 +82,7 @@ describe('Generator Module', () => {
   });
 });
 
-describe('Cat Companion Situational Evaluator', () => {
+describe('15 Cat Companion Situational Reactions', () => {
   const solution = [
     [5, 3, 4, 6, 7, 8, 9, 1, 2],
     [6, 7, 2, 1, 9, 5, 3, 4, 8],
@@ -95,37 +95,77 @@ describe('Cat Companion Situational Evaluator', () => {
     [3, 4, 5, 2, 8, 6, 1, 7, 9]
   ];
 
-  it('reacts with SHOCKED when a player inputs an incorrect duplicate move', () => {
-    const current = cloneBoard(solution);
-    current[0][2] = 0; // empty
-    const initial = cloneBoard(current);
-
-    // Place 5, but 5 already exists at (0, 0)
-    current[0][2] = 5;
-    const report = evaluateMove(current, solution, initial, 0, 2, 5);
-    expect(report.quality).toBe(MOVE_QUALITY.MISTAKE);
-    expect(report.emotion).toBe(CAT_EMOTIONS.SHOCKED);
-    expect(report.isCorrect).toBe(false);
-  });
-
-  it('reacts with HAPPY when placing a correct number', () => {
+  it('triggers SHOCKED on first conflict error', () => {
     const current = cloneBoard(solution);
     current[0][2] = 0;
     const initial = cloneBoard(current);
 
-    current[0][2] = 4; // correct
-    const report = evaluateMove(current, solution, initial, 0, 2, 4);
-    expect(report.isCorrect).toBe(true);
+    current[0][2] = 5;
+    const report = evaluateMove(current, solution, initial, 0, 2, 5, 0, 0);
+    expect(report.emotion).toBe(CAT_EMOTIONS.SHOCKED);
   });
 
-  it('reacts with CELEBRATE when completing the entire puzzle', () => {
+  it('triggers ANGRY on second consecutive error', () => {
+    const current = cloneBoard(solution);
+    current[0][2] = 0;
+    const initial = cloneBoard(current);
+
+    current[0][2] = 5;
+    const report = evaluateMove(current, solution, initial, 0, 2, 5, 0, 1);
+    expect(report.emotion).toBe(CAT_EMOTIONS.ANGRY);
+  });
+
+  it('triggers CRYING on 3+ consecutive errors', () => {
+    const current = cloneBoard(solution);
+    current[0][2] = 0;
+    const initial = cloneBoard(current);
+
+    current[0][2] = 5;
+    const report = evaluateMove(current, solution, initial, 0, 2, 5, 0, 2);
+    expect(report.emotion).toBe(CAT_EMOTIONS.CRYING);
+  });
+
+  it('triggers THUMBSUP on valid correct placement', () => {
+    const current = cloneBoard(solution);
+    current[0][2] = 0;
+    current[0][3] = 0;
+    current[1][2] = 0;
+    const initial = cloneBoard(current);
+
+    current[0][2] = 4;
+    const report = evaluateMove(current, solution, initial, 0, 2, 4, 0, 0);
+    expect(report.emotion).toBe(CAT_EMOTIONS.THUMBSUP);
+  });
+
+  it('triggers ECSTASY when completing a row/col/sector', () => {
+    const current = cloneBoard(solution);
+    current[0][2] = 0; // only 1 missing in row 0
+    current[8][8] = 0; // prevent 100% board solve
+    const initial = cloneBoard(current);
+
+    current[0][2] = 4;
+    const report = evaluateMove(current, solution, initial, 0, 2, 4, 1, 0);
+    expect(report.emotion).toBe(CAT_EMOTIONS.ECSTASY);
+  });
+
+  it('triggers BOSS on completing 100% of the puzzle', () => {
     const current = cloneBoard(solution);
     current[0][0] = 0;
     const initial = cloneBoard(current);
 
     current[0][0] = 5;
-    const report = evaluateMove(current, solution, initial, 0, 0, 5);
-    expect(report.emotion).toBe(CAT_EMOTIONS.CELEBRATE);
+    const report = evaluateMove(current, solution, initial, 0, 0, 5, 5, 0);
+    expect(report.emotion).toBe(CAT_EMOTIONS.BOSS);
     expect(report.progress).toBe(100);
+  });
+
+  it('triggers SAD on erasing cell', () => {
+    const current = cloneBoard(solution);
+    const initial = cloneBoard(current);
+    initial[0][0] = 0;
+
+    current[0][0] = 0;
+    const report = evaluateMove(current, solution, initial, 0, 0, 0, 2, 0);
+    expect(report.emotion).toBe(CAT_EMOTIONS.SAD);
   });
 });

@@ -2,18 +2,10 @@ import { GRID_SIZE, BOX_SIZE, CAT_EMOTIONS, MOVE_QUALITY } from './constants.js'
 import { isValidPlacement } from './validator.js';
 
 const ENCOURAGING_DIALOGUES = [
-  "Purr-fect move! Looking sharp! 🐾",
-  "Nice deduction! We're making progress.",
-  "Spot on! Keep the momentum going! ✨",
-  "Great eye! That fits beautifully.",
-  "Mochi approves! On to the next cell! 🐱"
-];
-
-const THINKING_DIALOGUES = [
-  "Hmm, let's scan the row and column...",
-  "What numbers can go here? Check the candidates!",
-  "Take your time, master puzzler.",
-  "Mochi is watching intently... 🐾"
+  "Spot on! Coach approves! 👍✨",
+  "Nice deduction! We're making progress. 👍",
+  "Great eye! That fits beautifully. 👍",
+  "Mochi approves! On to the next cell! 🐱👍"
 ];
 
 function getRandomItem(arr) {
@@ -28,7 +20,6 @@ function getRandomItem(arr) {
  * @returns {{ rowComplete: boolean, colComplete: boolean, boxComplete: boolean }}
  */
 export function checkSectorCompletion(board, row, col) {
-  // Check row
   let rowComplete = true;
   for (let c = 0; c < GRID_SIZE; c++) {
     if (board[row][c] === 0) {
@@ -37,7 +28,6 @@ export function checkSectorCompletion(board, row, col) {
     }
   }
 
-  // Check column
   let colComplete = true;
   for (let r = 0; r < GRID_SIZE; r++) {
     if (board[r][col] === 0) {
@@ -46,7 +36,6 @@ export function checkSectorCompletion(board, row, col) {
     }
   }
 
-  // Check box
   let boxComplete = true;
   const startRow = Math.floor(row / BOX_SIZE) * BOX_SIZE;
   const startCol = Math.floor(col / BOX_SIZE) * BOX_SIZE;
@@ -65,10 +54,6 @@ export function checkSectorCompletion(board, row, col) {
 
 /**
  * Calculates current progress percentage of player cells (excluding given clues).
- * @param {number[][]} currentBoard 
- * @param {number[][]} solutionBoard 
- * @param {number[][]} initialBoard 
- * @returns {number} Percentage (0 - 100)
  */
 export function calculateProgress(currentBoard, solutionBoard, initialBoard) {
   let playerTotal = 0;
@@ -89,26 +74,28 @@ export function calculateProgress(currentBoard, solutionBoard, initialBoard) {
 }
 
 /**
- * Evaluates the player's move in real time and produces a situational review report
- * for Mochi the Cat companion.
- * 
- * @param {number[][]} currentBoard - Board after the move
- * @param {number[][]} solutionBoard - The full solved board
- * @param {number[][]} initialBoard - The puzzle starting clues
- * @param {number} row - Placed cell row
- * @param {number} col - Placed cell col
- * @param {number} value - Digit placed (0 for erased)
- * @returns {object} Evaluation report with emotion, message, and move quality
+ * Evaluates the player's move in real time and maps it to one of the 15 Cat Sticker emotions!
  */
-export function evaluateMove(currentBoard, solutionBoard, initialBoard, row, col, value) {
-  // 1. Eraser move
+export function evaluateMove(
+  currentBoard,
+  solutionBoard,
+  initialBoard,
+  row,
+  col,
+  value,
+  streak = 0,
+  consecutiveErrors = 0
+) {
+  // 1. Eraser move -> SAD Droopy-eyed regret cat
   if (value === 0) {
     return {
       quality: MOVE_QUALITY.ERASE,
-      emotion: CAT_EMOTIONS.THINKING,
-      message: "Cleared that cell. Let's rethink our candidates! 🐾",
+      emotion: CAT_EMOTIONS.SAD,
+      message: "Cleared that cell... let's rethink our candidates! 🥺",
       progress: calculateProgress(currentBoard, solutionBoard, initialBoard),
-      isCorrect: true
+      isCorrect: true,
+      streak: 0,
+      errors: consecutiveErrors
     };
   }
 
@@ -118,65 +105,182 @@ export function evaluateMove(currentBoard, solutionBoard, initialBoard, row, col
 
   if (!isCorrect) {
     const isDirectDuplicate = !isValidPlacement(currentBoard, row, col, value);
+
+    // If 2+ consecutive errors -> Fountain tears crying cat
+    if (consecutiveErrors >= 2) {
+      return {
+        quality: MOVE_QUALITY.MISTAKE,
+        emotion: CAT_EMOTIONS.CRYING,
+        message: "WAAAAH! The Sudoku math is not mathing right now! 😭",
+        progress,
+        isCorrect: false,
+        streak: 0,
+        errors: consecutiveErrors + 1
+      };
+    }
+
+    // If 1 previous error -> Anime vein angry mark cat
+    if (consecutiveErrors === 1) {
+      return {
+        quality: MOVE_QUALITY.MISTAKE,
+        emotion: CAT_EMOTIONS.ANGRY,
+        message: "That's not it chief... Don't make Mochi use 10% of his power! 💢😾",
+        progress,
+        isCorrect: false,
+        streak: 0,
+        errors: consecutiveErrors + 1
+      };
+    }
+
+    // First error / direct duplicate -> Blurry Screaming shock cat
     const message = isDirectDuplicate
-      ? `Meow?! That ${value} duplicates another one in the sector! 😾`
-      : `Hmm, that ${value} doesn't seem quite right there. Check again!`;
+      ? `MEOW?! THAT'S A DUPLICATE! Check your row or column! 😱😾`
+      : `Hmm, that ${value} doesn't seem quite right there. Check again! 😱`;
 
     return {
       quality: MOVE_QUALITY.MISTAKE,
       emotion: CAT_EMOTIONS.SHOCKED,
       message,
       progress,
-      isCorrect: false
+      isCorrect: false,
+      streak: 0,
+      errors: 1
     };
   }
 
-  // 3. Move is correct! Check for sector completions
+  // 3. Move is correct! Check milestone triggers
   const { rowComplete, colComplete, boxComplete } = checkSectorCompletion(currentBoard, row, col);
+  const newStreak = streak + 1;
 
+  // 100% Solved -> Boss Cat in Purple Heart Sunglasses!
   if (progress === 100) {
     return {
       quality: MOVE_QUALITY.BRILLIANT,
-      emotion: CAT_EMOTIONS.CELEBRATE,
-      message: "WE DID IT! 🏆 Purr-fect game! You're a true Sudoku Grandmaster!",
+      emotion: CAT_EMOTIONS.BOSS,
+      message: "TOO EASY! Sudoku Grandmaster status unlocked! Pure swag! 💜🕶️🏆",
       progress: 100,
-      isCorrect: true
+      isCorrect: true,
+      streak: newStreak,
+      errors: 0
     };
   }
 
+  // Sector completed -> Heart Vortex Ecstasy Cat!
   if (rowComplete || colComplete || boxComplete) {
-    const sectorName = rowComplete ? "row" : colComplete ? "column" : "3×3 box";
+    const sectorName = rowComplete ? "row" : colComplete ? "column" : "3×3 block";
     return {
       quality: MOVE_QUALITY.BRILLIANT,
-      emotion: CAT_EMOTIONS.CHEERING,
-      message: `Woah! You just completed that entire ${sectorName}! ⭐`,
+      emotion: CAT_EMOTIONS.ECSTASY,
+      message: `WOAH! You just cleared an entire ${sectorName}! PURE BLISS! 💖🎉`,
       progress,
-      isCorrect: true
+      isCorrect: true,
+      streak: newStreak,
+      errors: 0
     };
   }
 
+  // 5 correct moves in a row -> Sparkle Paw Heart Cat!
+  if (newStreak >= 5 && newStreak % 5 === 0) {
+    return {
+      quality: MOVE_QUALITY.SOLID,
+      emotion: CAT_EMOTIONS.LOVE,
+      message: `Purrrrr! ${newStreak} in a row without a single mistake! ❤️✨`,
+      progress,
+      isCorrect: true,
+      streak: newStreak,
+      errors: 0
+    };
+  }
+
+  // Over 75% completed -> Dilated Laser Focus Cat!
   if (progress >= 75) {
     return {
       quality: MOVE_QUALITY.SOLID,
-      emotion: CAT_EMOTIONS.HAPPY,
-      message: `Over ${progress}% complete! The finish line is right here! 🚀`,
+      emotion: CAT_EMOTIONS.FOCUS,
+      message: `Over ${progress}% complete! In the endgame now! 🎯👀`,
       progress,
-      isCorrect: true
+      isCorrect: true,
+      streak: newStreak,
+      errors: 0
     };
   }
 
+  // Standard correct move -> Thumbs-up Cat!
   return {
     quality: MOVE_QUALITY.SOLID,
-    emotion: CAT_EMOTIONS.HAPPY,
+    emotion: CAT_EMOTIONS.THUMBSUP,
     message: getRandomItem(ENCOURAGING_DIALOGUES),
     progress,
-    isCorrect: true
+    isCorrect: true,
+    streak: newStreak,
+    errors: 0
   };
 }
 
 /**
- * Returns a dialogue when selecting an empty cell.
+ * Empty cell selected -> Buffering Loading Cat (or Sweatdrop on hard)
  */
-export function getThinkingDialogue() {
-  return getRandomItem(THINKING_DIALOGUES);
+export function getThinkingReaction(difficulty = 'easy') {
+  if (difficulty === 'hard' || difficulty === 'expert') {
+    return {
+      emotion: CAT_EMOTIONS.SWEATDROP,
+      message: "Sweating bullets here! Think carefully before placing! 💧"
+    };
+  }
+  return {
+    emotion: CAT_EMOTIONS.THINKING,
+    message: "Loading brain cells... what number fits here? 🔄🐾"
+  };
+}
+
+/**
+ * Notes mode toggled -> Sleepy Study Cat with Notebook & Pencil
+ */
+export function getStudyReaction(notesMode) {
+  return {
+    emotion: CAT_EMOTIONS.STUDY,
+    message: notesMode
+      ? "Pencil notes mode activated! Let's do some math! ✏️📓"
+      : "Notes mode off. Back to confirmed placements! 🐾"
+  };
+}
+
+/**
+ * Hint requested -> Leg-Hugging Puppy Cat
+ */
+export function getHintReaction(digit) {
+  return {
+    emotion: CAT_EMOTIONS.HINT,
+    message: `Here's a gentle paw to guide you! ${digit} fits right here! 💡🐾`
+  };
+}
+
+/**
+ * Board reset / New Game -> Polite Beluga Cat
+ */
+export function getPoliteReaction() {
+  return {
+    emotion: CAT_EMOTIONS.POLITE,
+    message: "Politely waiting for your grandmaster move :) 🐾"
+  };
+}
+
+/**
+ * Petting the cat -> Paw Heart Sparkle Cat
+ */
+export function getLoveReaction() {
+  return {
+    emotion: CAT_EMOTIONS.LOVE,
+    message: "Purrrrr! Mochi loves the pets! ❤️✨"
+  };
+}
+
+/**
+ * Auto-Solve / Genius move -> Gojo Satoru Cat (Domain Expansion)
+ */
+export function getGojoReaction() {
+  return {
+    emotion: CAT_EMOTIONS.GOJO,
+    message: "Domain Expansion: Infinite Sudoku Void! You alone are the honored one! 🤞⚡"
+  };
 }

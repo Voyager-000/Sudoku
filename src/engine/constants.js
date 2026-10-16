@@ -37,13 +37,31 @@ export const DIFFICULTIES = {
   }
 };
 
+/**
+ * The 15 Classified Cat Reaction Emotions
+ */
 export const CAT_EMOTIONS = {
-  IDLE: 'idle',
   THINKING: 'thinking',
-  HAPPY: 'happy',
+  THUMBSUP: 'thumbsup',
   SHOCKED: 'shocked',
-  CHEERING: 'cheering',
-  CELEBRATE: 'celebrate'
+  ECSTASY: 'ecstasy',
+  ANGRY: 'angry',
+  STUDY: 'study',
+  POLITE: 'polite',
+  LOVE: 'love',
+  SAD: 'sad',
+  SWEATDROP: 'sweatdrop',
+  HINT: 'hint',
+  CRYING: 'crying',
+  FOCUS: 'focus',
+  GOJO: 'gojo',
+  BOSS: 'boss',
+
+  // Compatibility aliases
+  IDLE: 'polite',
+  HAPPY: 'thumbsup',
+  CHEERING: 'ecstasy',
+  CELEBRATE: 'boss'
 };
 
 export const MOVE_QUALITY = {

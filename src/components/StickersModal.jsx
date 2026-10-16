@@ -1,53 +1,49 @@
 import React from 'react';
-import { getStickerUrl } from '../engine/stickers.js';
-import { CAT_EMOTIONS } from '../engine/constants.js';
+import { STICKER_CATALOG } from '../engine/stickers.js';
 
 export function StickersModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
-  const stickerSlots = [
-    { id: CAT_EMOTIONS.IDLE, label: 'Default / Idle', desc: 'When waiting for moves' },
-    { id: CAT_EMOTIONS.THINKING, label: 'Thinking', desc: 'Selecting an empty cell' },
-    { id: CAT_EMOTIONS.HAPPY, label: 'Happy / Purring', desc: 'Correct number placed' },
-    { id: CAT_EMOTIONS.SHOCKED, label: 'Shocked / Confused', desc: 'Duplicate or rule conflict' },
-    { id: CAT_EMOTIONS.CELEBRATE, label: 'Victory Celebration', desc: 'Completing the puzzle' }
-  ];
-
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="stickers-modal-card" onClick={e => e.stopPropagation()}>
+      <div className="modal-content-card stickers-modal-card" onClick={e => e.stopPropagation()}>
         <div className="modal-header-row">
           <div className="modal-header-title">
             <span className="modal-icon">🐱</span>
-            <h3>Telegram Kitten Stickers</h3>
+            <h3>Telegram Reaction Stickers (15 Active)</h3>
           </div>
-          <button type="button" className="modal-close-btn" onClick={onClose}>✕</button>
+          <button type="button" className="modal-close-btn" onClick={onClose} aria-label="Close">✕</button>
         </div>
 
         <p className="modal-description">
-          Send your kitten reaction stickers from Telegram in the chat anytime! We will instantly hook them up into these reaction slots:
+          Coach Mochi reacts live to your Sudoku moves using these 15 authentic Telegram cat stickers:
         </p>
 
-        <div className="sticker-slots-grid">
-          {stickerSlots.map(slot => (
+        <div className="sticker-slots-grid-scroll">
+          {STICKER_CATALOG.map((slot, index) => (
             <div key={slot.id} className="sticker-slot-card">
               <div className="sticker-preview-box">
                 <img
-                  src={getStickerUrl(slot.id)}
-                  alt={slot.label}
+                  src={slot.file}
+                  alt={slot.name}
                   className="sticker-preview-img"
+                  loading="lazy"
                 />
               </div>
               <div className="sticker-slot-info">
-                <span className="slot-name">{slot.label}</span>
-                <span className="slot-desc">{slot.desc}</span>
+                <div className="slot-title-row">
+                  <span className="slot-number">#{index + 1}</span>
+                  <span className="slot-name">{slot.name}</span>
+                </div>
+                <span className="slot-mood">{slot.mood}</span>
+                <span className="slot-desc">Trigger: {slot.trigger}</span>
               </div>
             </div>
           ))}
         </div>
 
         <button type="button" className="modal-action-btn" onClick={onClose}>
-          Ready for Stickers! 🚀
+          Back to Sudoku! 🚀
         </button>
       </div>
     </div>
