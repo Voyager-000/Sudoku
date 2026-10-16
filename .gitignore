@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary archives and extracted stickers
+*.zip
+stickers_temp/
+stickers_temp_webp/

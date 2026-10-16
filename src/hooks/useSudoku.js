@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { generatePuzzle } from '../engine/generator.js';
 import { getConflicts, isBoardSolved, cloneBoard } from '../engine/validator.js';
 import { evaluateMove } from '../engine/evaluator.js';
-import { GRID_SIZE, TOTAL_CELLS } from '../engine/constants.js';
+import { GRID_SIZE, TOTAL_CELLS, CAT_EMOTIONS } from '../engine/constants.js';
+import { sound } from '../utils/audio.js';
 
-export function useSudoku(onMoveEvaluated) {
+export function useSudoku(onMoveEvaluated, options = {}) {
+  const { autoRemoveNotes = true } = options;
   const [difficulty, setDifficulty] = useState('easy');
   const [initialBoard, setInitialBoard] = useState(null);
   const [solutionBoard, setSolutionBoard] = useState(null);
@@ -17,6 +19,8 @@ export function useSudoku(onMoveEvaluated) {
   const [conflicts, setConflicts] = useState(new Set());
   const [history, setHistory] = useState([]);
   const [hintsRemaining, setHintsRemaining] = useState(3);
+  const [streak, setStreak] = useState(0);
+  const [consecutiveErrors, setConsecutiveErrors] = useState(0);
   const [isSolved, setIsSolved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,6 +37,8 @@ export function useSudoku(onMoveEvaluated) {
       setNotes(Array.from({ length: GRID_SIZE }, () => Array.from({ length: GRID_SIZE }, () => new Set())));
       setConflicts(new Set());
       setHistory([]);
+      setStreak(0);
+      setConsecutiveErrors(0);
       setHintsRemaining(3);
       setIsSolved(false);
       setIsLoading(false);
@@ -43,20 +49,18 @@ export function useSudoku(onMoveEvaluated) {
     startNewGame('easy');
   }, []);
 
-  // Select a cell
   const selectCell = useCallback((row, col) => {
     setSelectedCell({ row, col });
   }, []);
 
-  // Enter a digit into the selected cell
   const inputDigit = useCallback((digit) => {
     if (!selectedCell || !currentBoard || !initialBoard || isSolved) return;
     const { row, col } = selectedCell;
 
-    // Cannot modify initial puzzle clues
     if (initialBoard[row][col] !== 0) return;
 
     if (notesMode) {
+      sound.playTap();
       setNotes(prevNotes => {
         const newNotes = prevNotes.map((r, rIdx) => 
           r.map((cellSet, cIdx) => {
@@ -83,20 +87,74 @@ export function useSudoku(onMoveEvaluated) {
     setHistory(prev => [...prev, { row, col, prevVal, newVal: digit }]);
     setCurrentBoard(newBoard);
 
+    // Auto clear notes for this cell and optionally from same row, column, and box
+    setNotes(prevNotes => {
+      const boxStartRow = Math.floor(row / 3) * 3;
+      const boxStartCol = Math.floor(col / 3) * 3;
+      return prevNotes.map((rArr, rIdx) =>
+        rArr.map((cellSet, cIdx) => {
+          if (rIdx === row && cIdx === col) {
+            return new Set();
+          }
+          if (autoRemoveNotes) {
+            const inSameRow = rIdx === row;
+            const inSameCol = cIdx === col;
+            const inSameBox =
+              rIdx >= boxStartRow && rIdx < boxStartRow + 3 &&
+              cIdx >= boxStartCol && cIdx < boxStartCol + 3;
+            if ((inSameRow || inSameCol || inSameBox) && cellSet.has(digit)) {
+              const updated = new Set(cellSet);
+              updated.delete(digit);
+              return updated;
+            }
+          }
+          return cellSet;
+        })
+      );
+    });
+
     const updatedConflicts = getConflicts(newBoard);
     setConflicts(updatedConflicts);
 
+    const isCorrect = solutionBoard ? digit === solutionBoard[row][col] : true;
+    if (isCorrect) {
+      setStreak(s => s + 1);
+      setConsecutiveErrors(0);
+    } else {
+      setStreak(0);
+      setConsecutiveErrors(e => e + 1);
+      sound.playError();
+    }
+
     if (onMoveEvaluated && solutionBoard) {
-      const review = evaluateMove(newBoard, solutionBoard, initialBoard, row, col, digit);
+      const review = evaluateMove(
+        newBoard,
+        solutionBoard,
+        initialBoard,
+        row,
+        col,
+        digit,
+        streak,
+        consecutiveErrors
+      );
+      if (isCorrect) {
+        if (review.emotion === CAT_EMOTIONS.ECSTASY) {
+          sound.playSectionComplete();
+        } else {
+          sound.playChime();
+        }
+      }
       onMoveEvaluated(review);
+    } else if (isCorrect) {
+      sound.playChime();
     }
 
     if (isBoardSolved(newBoard)) {
       setIsSolved(true);
+      sound.playVictory();
     }
-  }, [selectedCell, currentBoard, initialBoard, solutionBoard, isSolved, notesMode, onMoveEvaluated]);
+  }, [selectedCell, currentBoard, initialBoard, solutionBoard, isSolved, notesMode, streak, consecutiveErrors, autoRemoveNotes, onMoveEvaluated]);
 
-  // Erase value in selected cell
   const eraseCell = useCallback(() => {
     if (!selectedCell || !currentBoard || !initialBoard || isSolved) return;
     const { row, col } = selectedCell;
@@ -125,7 +183,6 @@ export function useSudoku(onMoveEvaluated) {
     }
   }, [selectedCell, currentBoard, initialBoard, solutionBoard, isSolved, notes, onMoveEvaluated]);
 
-  // Reset puzzle back to initial state
   const resetGame = useCallback(() => {
     if (!initialBoard) return;
     setCurrentBoard(cloneBoard(initialBoard));
@@ -133,26 +190,17 @@ export function useSudoku(onMoveEvaluated) {
     setConflicts(new Set());
     setNotes(Array.from({ length: GRID_SIZE }, () => Array.from({ length: GRID_SIZE }, () => new Set())));
     setHistory([]);
-    if (onMoveEvaluated) {
-      onMoveEvaluated({
-        emotion: 'thinking',
-        message: "Fresh start! Let's conquer this puzzle! 🐾",
-        progress: 0,
-        isCorrect: true
-      });
-    }
-  }, [initialBoard, onMoveEvaluated]);
+    setStreak(0);
+    setConsecutiveErrors(0);
+  }, [initialBoard]);
 
-  // Use a hint to fill one empty cell correctly
-  const useHint = useCallback(() => {
+  const useHint = useCallback((onHintCallback) => {
     if (hintsRemaining <= 0 || !currentBoard || !solutionBoard || isSolved) return;
 
-    // If cell is currently selected and empty or wrong, fill it
     let target = null;
     if (selectedCell && currentBoard[selectedCell.row][selectedCell.col] !== solutionBoard[selectedCell.row][selectedCell.col]) {
       target = selectedCell;
     } else {
-      // Find first empty or wrong cell
       for (let r = 0; r < GRID_SIZE; r++) {
         for (let c = 0; c < GRID_SIZE; c++) {
           if (currentBoard[r][c] !== solutionBoard[r][c]) {
@@ -175,22 +223,16 @@ export function useSudoku(onMoveEvaluated) {
     setHintsRemaining(prev => Math.max(0, prev - 1));
     setConflicts(getConflicts(newBoard));
 
-    if (onMoveEvaluated) {
-      onMoveEvaluated({
-        emotion: 'happy',
-        message: `Psst! ${correctDigit} fits perfectly right here! 💡🐾`,
-        progress: 50,
-        isCorrect: true
-      });
+    if (onHintCallback) {
+      onHintCallback(correctDigit);
     }
 
     if (isBoardSolved(newBoard)) {
       setIsSolved(true);
     }
-  }, [hintsRemaining, currentBoard, solutionBoard, selectedCell, isSolved, onMoveEvaluated]);
+  }, [hintsRemaining, currentBoard, solutionBoard, selectedCell, isSolved]);
 
-  // Undo last move
-  const undo = useCallback(() => {
+  const undo = useCallback((onUndoCallback) => {
     if (history.length === 0 || !currentBoard || isSolved) return;
 
     const lastMove = history[history.length - 1];
@@ -201,25 +243,23 @@ export function useSudoku(onMoveEvaluated) {
     setCurrentBoard(newBoard);
     setConflicts(getConflicts(newBoard));
     setSelectedCell({ row: lastMove.row, col: lastMove.col });
+
+    if (onUndoCallback) {
+      onUndoCallback();
+    }
   }, [history, currentBoard, isSolved]);
 
-  // Auto-solve puzzle
-  const solveGame = useCallback(() => {
+  const solveGame = useCallback((onSolveCallback) => {
     if (!solutionBoard) return;
     setCurrentBoard(cloneBoard(solutionBoard));
     setConflicts(new Set());
     setIsSolved(true);
-    if (onMoveEvaluated) {
-      onMoveEvaluated({
-        emotion: 'celebrate',
-        message: "Behold! The complete solution revealed! 🐾✨",
-        progress: 100,
-        isCorrect: true
-      });
-    }
-  }, [solutionBoard, onMoveEvaluated]);
 
-  // Count filled cells
+    if (onSolveCallback) {
+      onSolveCallback();
+    }
+  }, [solutionBoard]);
+
   const getFilledCount = useCallback(() => {
     if (!currentBoard) return 0;
     let filled = 0;
@@ -231,7 +271,6 @@ export function useSudoku(onMoveEvaluated) {
     return filled;
   }, [currentBoard]);
 
-  // Count remaining placements needed for digits 1-9
   const getRemainingCounts = useCallback(() => {
     const counts = { 1: 9, 2: 9, 3: 9, 4: 9, 5: 9, 6: 9, 7: 9, 8: 9, 9: 9 };
     if (!currentBoard) return counts;
@@ -259,6 +298,8 @@ export function useSudoku(onMoveEvaluated) {
     isSolved,
     isLoading,
     hintsRemaining,
+    streak,
+    consecutiveErrors,
     filledCount: getFilledCount(),
     totalCells: TOTAL_CELLS,
     canUndo: history.length > 0,

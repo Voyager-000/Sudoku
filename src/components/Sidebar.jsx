@@ -26,6 +26,7 @@ export function Sidebar({ onNewGame, onOpenStickers, onOpenSettings, onOpenAbout
       {/* Navigation Links */}
       <nav className="sidebar-nav">
         <button
+          id="sidebar-nav-new"
           type="button"
           className="nav-item nav-item-active"
           onClick={onNewGame}
@@ -35,6 +36,7 @@ export function Sidebar({ onNewGame, onOpenStickers, onOpenSettings, onOpenAbout
         </button>
 
         <button
+          id="sidebar-nav-settings"
           type="button"
           className="nav-item"
           onClick={onOpenSettings}
@@ -44,6 +46,7 @@ export function Sidebar({ onNewGame, onOpenStickers, onOpenSettings, onOpenAbout
         </button>
 
         <button
+          id="sidebar-nav-stickers"
           type="button"
           className="nav-item"
           onClick={onOpenStickers}
@@ -53,6 +56,7 @@ export function Sidebar({ onNewGame, onOpenStickers, onOpenSettings, onOpenAbout
         </button>
 
         <button
+          id="sidebar-nav-about"
           type="button"
           className="nav-item"
           onClick={onOpenAbout}

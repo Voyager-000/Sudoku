@@ -4,19 +4,31 @@ import { TopBar } from './components/TopBar.jsx';
 import { Board } from './components/Board.jsx';
 import { Controls } from './components/Controls.jsx';
 import { StickersModal } from './components/StickersModal.jsx';
+import { SettingsModal } from './components/SettingsModal.jsx';
+import { AboutModal } from './components/AboutModal.jsx';
 import { StatsModal } from './components/StatsModal.jsx';
 
 import { useSudoku } from './hooks/useSudoku.js';
 import { useTimer } from './hooks/useTimer.js';
 import { useKeyboard } from './hooks/useKeyboard.js';
 import { useCatEmotion } from './hooks/useCatEmotion.js';
+import { sound } from './utils/audio.js';
 
 import './styles/index.css';
 import './styles/board.css';
 import './styles/controls.css';
 
 export function App() {
+  // Modal states
   const [isStickersModalOpen, setIsStickersModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+
+  // Settings states
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [autoRemoveNotes, setAutoRemoveNotes] = useState(true);
+  const [highlightConflicts, setHighlightConflicts] = useState(true);
+  const [highlightMatching, setHighlightMatching] = useState(true);
 
   const {
     emotion,
@@ -24,7 +36,12 @@ export function App() {
     isTalking,
     triggerReaction,
     onSelectEmptyCell,
-    petCat
+    onToggleNotes,
+    onHintGiven,
+    onResetGame,
+    petCat,
+    onGojoSolve,
+    onUndoMove
   } = useCatEmotion();
 
   const {
@@ -40,6 +57,7 @@ export function App() {
     hintsRemaining,
     filledCount,
     totalCells,
+    canUndo,
     startNewGame,
     selectCell,
     inputDigit,
@@ -47,10 +65,27 @@ export function App() {
     resetGame,
     useHint,
     undo,
+    solveGame,
     setNotesMode
-  } = useSudoku(triggerReaction);
+  } = useSudoku(triggerReaction, { autoRemoveNotes });
 
   const { formattedTime, resetTimer } = useTimer(!isSolved && !isLoading);
+
+  const handleToggleSound = () => {
+    setSoundEnabled(prev => {
+      const next = !prev;
+      sound.setEnabled(next);
+      return next;
+    });
+  };
+
+  const handleToggleNotes = () => {
+    setNotesMode(prev => {
+      const next = !prev;
+      onToggleNotes(next);
+      return next;
+    });
+  };
 
   // Keyboard navigation & inputs
   useKeyboard({
@@ -58,20 +93,29 @@ export function App() {
     selectCell,
     inputDigit,
     eraseCell,
-    undo,
-    toggleNotesMode: () => setNotesMode(prev => !prev)
+    undo: () => undo(onUndoMove),
+    toggleNotesMode: handleToggleNotes
   });
 
   const handleCellSelect = (r, c) => {
     selectCell(r, c);
     if (currentBoard && currentBoard[r][c] === 0) {
-      onSelectEmptyCell();
+      onSelectEmptyCell(difficulty);
     }
   };
 
   const handleNewGame = (diff = difficulty) => {
     resetTimer();
     startNewGame(diff);
+  };
+
+  const handleReset = () => {
+    resetGame();
+    onResetGame();
+  };
+
+  const handleUseHint = () => {
+    useHint(onHintGiven);
   };
 
   const selectedDigit = selectedCell && currentBoard
@@ -84,8 +128,8 @@ export function App() {
       <Sidebar
         onNewGame={() => handleNewGame(difficulty)}
         onOpenStickers={() => setIsStickersModalOpen(true)}
-        onOpenSettings={() => alert("Settings: Dark Theme (Default) active! Sound and animations enabled.")}
-        onOpenAbout={() => alert("Sudoku Open Lab — Community-driven open-source project designed for students to learn web development, algorithms, and Git!")}
+        onOpenSettings={() => setIsSettingsModalOpen(true)}
+        onOpenAbout={() => setIsAboutModalOpen(true)}
       />
 
       {/* 2. Main Center Viewport */}
@@ -98,7 +142,7 @@ export function App() {
           totalCells={totalCells}
           hintsRemaining={hintsRemaining}
           onChangeDifficulty={(newDiff) => handleNewGame(newDiff)}
-          onUseHint={useHint}
+          onUseHint={handleUseHint}
         />
 
         {/* Center Game Play Area: Board + Right Controls Panel */}
@@ -110,6 +154,8 @@ export function App() {
             notes={notes}
             selectedCell={selectedCell}
             conflicts={conflicts}
+            highlightConflicts={highlightConflicts}
+            highlightMatching={highlightMatching}
             onSelectCell={handleCellSelect}
             kittenEmotion={emotion}
             kittenDialogue={dialogue}
@@ -122,9 +168,13 @@ export function App() {
             filledCount={filledCount}
             totalCells={totalCells}
             selectedDigit={selectedDigit}
+            notesMode={notesMode}
+            canUndo={canUndo}
             onInputDigit={inputDigit}
+            onToggleNotes={handleToggleNotes}
+            onUndo={() => undo(onUndoMove)}
             onErase={eraseCell}
-            onReset={resetGame}
+            onReset={handleReset}
             onNewGame={() => handleNewGame(difficulty)}
           />
         </div>
@@ -134,6 +184,26 @@ export function App() {
       <StickersModal
         isOpen={isStickersModalOpen}
         onClose={() => setIsStickersModalOpen(false)}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+        soundEnabled={soundEnabled}
+        onToggleSound={handleToggleSound}
+        autoRemoveNotes={autoRemoveNotes}
+        onToggleAutoRemoveNotes={() => setAutoRemoveNotes(prev => !prev)}
+        highlightConflicts={highlightConflicts}
+        onToggleHighlightConflicts={() => setHighlightConflicts(prev => !prev)}
+        highlightMatching={highlightMatching}
+        onToggleHighlightMatching={() => setHighlightMatching(prev => !prev)}
+      />
+
+      {/* About Modal */}
+      <AboutModal
+        isOpen={isAboutModalOpen}
+        onClose={() => setIsAboutModalOpen(false)}
       />
 
       {/* Victory Celebration Modal */}

@@ -9,6 +9,8 @@ export function Board({
   notes,
   selectedCell,
   conflicts,
+  highlightConflicts = true,
+  highlightMatching = true,
   onSelectCell,
   kittenEmotion,
   kittenDialogue,
@@ -46,8 +48,8 @@ export function Board({
                 : false;
 
               const isHighlighted = isSameRow || isSameCol || isSameBox;
-              const isSameNumber = selectedValue !== 0 && val === selectedValue && !isSelected;
-              const isConflict = conflicts.has(`${r}-${c}`);
+              const isSameNumber = highlightMatching && selectedValue !== 0 && val === selectedValue && !isSelected;
+              const isConflict = highlightConflicts && conflicts.has(`${r}-${c}`);
 
               return (
                 <Cell

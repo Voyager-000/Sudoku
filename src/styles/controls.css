@@ -46,25 +46,61 @@
   box-shadow: 0 4px 16px var(--primary-glow);
 }
 
-/* Action Row (Erase & Reset) */
-.keypad-actions-row {
-  display: flex;
-  gap: 10px;
+/* Action Grid (Undo, Notes, Erase, Reset) */
+.keypad-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
 .action-pill-btn {
-  flex: 1;
-  height: 44px;
+  height: 42px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   font-family: inherit;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.18s;
+  user-select: none;
+}
+
+.action-pill-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.undo-pill-btn {
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #CBD5E1;
+}
+
+.undo-pill-btn:not(:disabled):hover {
+  background: rgba(148, 163, 184, 0.2);
+  transform: translateY(-1px);
+}
+
+.notes-pill-btn {
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #C084FC;
+}
+
+.notes-pill-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  transform: translateY(-1px);
+}
+
+.notes-pill-active {
+  background: #9333EA !important;
+  border-color: #C084FC !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 12px rgba(168, 85, 247, 0.45);
 }
 
 .erase-pill-btn {
@@ -216,8 +252,11 @@
   background: #12192A;
   border: 1px solid var(--border-panel);
   border-radius: 20px;
-  max-width: 500px;
+  max-width: 520px;
   width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
   padding: 1.75rem;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
   color: var(--text-white);
@@ -228,7 +267,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .modal-header-title {
@@ -256,17 +295,20 @@
 }
 
 .modal-description {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-dim);
   line-height: 1.4;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
-.sticker-slots-grid {
+.sticker-slots-grid-scroll {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 1.5rem;
+  overflow-y: auto;
+  max-height: 50vh;
+  padding-right: 6px;
+  margin-bottom: 1.25rem;
 }
 
 .sticker-slot-card {
@@ -280,24 +322,42 @@
 }
 
 .sticker-preview-box {
-  width: 44px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   background: #0D1527;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .sticker-preview-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .sticker-slot-info {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+}
+
+.slot-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slot-number {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: rgba(84, 104, 255, 0.15);
+  padding: 1px 6px;
+  border-radius: 4px;
 }
 
 .slot-name {
@@ -306,7 +366,179 @@
   color: var(--text-white);
 }
 
+.slot-mood {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #60A5FA;
+}
+
 .slot-desc {
   font-size: 0.72rem;
   color: var(--text-dim);
 }
+
+/* Settings Modal & Options */
+.settings-modal-card {
+  max-width: 480px;
+  width: 100%;
+}
+
+.settings-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #182238;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.setting-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.setting-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #334155;
+  transition: 0.22s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.22s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+/* About Modal */
+.about-modal-card {
+  max-width: 540px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.about-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 1rem;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #60A5FA;
+}
+
+.about-text {
+  font-size: 0.85rem;
+  color: #CBD5E1;
+  line-height: 1.5;
+}
+
+.about-text code {
+  background: rgba(84, 104, 255, 0.18);
+  color: #93C5FD;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+.about-links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.about-link-chip {
+  background: #182238;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chip-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.chip-name {
+  font-size: 0.76rem;
+  color: #E2E8F0;
+  font-family: monospace;
+}
+
