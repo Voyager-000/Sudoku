@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none">
+  <!-- Thinking Tabby Kitten Peeking Over Border -->
+  <g id="kitten-thinking">
+    <!-- Fluffy Ears -->
+    <path d="M 28 44 L 32 12 L 50 28 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+    <path d="M 32 40 L 36 18 L 47 28 Z" fill="#FDA4AF"/>
+    <path d="M 92 40 L 88 8 L 70 24 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+    <path d="M 88 36 L 84 14 L 73 24 Z" fill="#FDA4AF"/>
+
+    <!-- Head slightly tilted -->
+    <ellipse cx="60" cy="50" rx="36" ry="30" fill="#E2E8F0" stroke="#475569" stroke-width="2" transform="rotate(-3 60 50)"/>
+    
+    <!-- Tabby Stripes on Head -->
+    <path d="M 53 22 L 54 34" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 59 20 L 58 35" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 65 22 L 63 34" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Curious Eyes Looking Sideways/Up -->
+    <ellipse cx="44" cy="47" rx="7" ry="8" fill="#1E293B"/>
+    <circle cx="47" cy="44" r="2.8" fill="#FFFFFF"/>
+    <ellipse cx="76" cy="47" rx="7" ry="8" fill="#1E293B"/>
+    <circle cx="79" cy="44" r="2.8" fill="#FFFFFF"/>
+
+    <!-- Eyebrows (Curious) -->
+    <path d="M 38 37 Q 44 34 49 38" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 71 36 Q 76 33 82 37" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Nose & Mouth -->
+    <polygon points="58,56 62,56 60,59" fill="#FB7185"/>
+    <path d="M 57 61 Q 60 63 62 61" stroke="#475569" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="56" x2="10" y2="52" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="28" y1="60" x2="12" y2="62" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="92" y1="56" x2="110" y2="52" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="92" y1="60" x2="108" y2="62" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Paws Resting on Board -->
+    <ellipse cx="38" cy="80" rx="9" ry="7" fill="#F8FAFC" stroke="#475569" stroke-width="2"/>
+    <ellipse cx="82" cy="80" rx="9" ry="7" fill="#F8FAFC" stroke="#475569" stroke-width="2"/>
+  </g>
+</svg>

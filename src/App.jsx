@@ -1,9 +1,9 @@
-import React from 'react';
-import { Header } from './components/Header.jsx';
+import React, { useState } from 'react';
+import { Sidebar } from './components/Sidebar.jsx';
+import { TopBar } from './components/TopBar.jsx';
 import { Board } from './components/Board.jsx';
-import { CatCompanion } from './components/CatCompanion.jsx';
 import { Controls } from './components/Controls.jsx';
-import { Numpad } from './components/Numpad.jsx';
+import { StickersModal } from './components/StickersModal.jsx';
 import { StatsModal } from './components/StatsModal.jsx';
 
 import { useSudoku } from './hooks/useSudoku.js';
@@ -14,9 +14,10 @@ import { useCatEmotion } from './hooks/useCatEmotion.js';
 import './styles/index.css';
 import './styles/board.css';
 import './styles/controls.css';
-import './styles/cat.css';
 
 export function App() {
+  const [isStickersModalOpen, setIsStickersModalOpen] = useState(false);
+
   const {
     emotion,
     dialogue,
@@ -36,14 +37,16 @@ export function App() {
     notesMode,
     isSolved,
     isLoading,
-    canUndo,
-    remainingCounts,
+    hintsRemaining,
+    filledCount,
+    totalCells,
     startNewGame,
     selectCell,
     inputDigit,
     eraseCell,
+    resetGame,
+    useHint,
     undo,
-    solveGame,
     setNotesMode
   } = useSudoku(triggerReaction);
 
@@ -66,60 +69,72 @@ export function App() {
     }
   };
 
-  const handleNewGame = (diff) => {
+  const handleNewGame = (diff = difficulty) => {
     resetTimer();
     startNewGame(diff);
   };
 
+  const selectedDigit = selectedCell && currentBoard
+    ? currentBoard[selectedCell.row][selectedCell.col]
+    : null;
+
   return (
     <div className="app-container">
-      <Header />
+      {/* 1. Left Sidebar */}
+      <Sidebar
+        onNewGame={() => handleNewGame(difficulty)}
+        onOpenStickers={() => setIsStickersModalOpen(true)}
+        onOpenSettings={() => alert("Settings: Dark Theme (Default) active! Sound and animations enabled.")}
+        onOpenAbout={() => alert("Sudoku Open Lab — Community-driven open-source project designed for students to learn web development, algorithms, and Git!")}
+      />
 
-      <main className="main-content">
-        <div className="game-layout">
-          {/* Sudoku 9x9 Grid */}
-          <div className="board-section">
-            <Board
-              board={currentBoard}
-              initialBoard={initialBoard}
-              notes={notes}
-              selectedCell={selectedCell}
-              conflicts={conflicts}
-              onSelectCell={handleCellSelect}
-            />
-          </div>
+      {/* 2. Main Center Viewport */}
+      <main className="main-content-viewport">
+        {/* Top Stats Bar */}
+        <TopBar
+          difficulty={difficulty}
+          timerDisplay={formattedTime}
+          filledCount={filledCount}
+          totalCells={totalCells}
+          hintsRemaining={hintsRemaining}
+          onChangeDifficulty={(newDiff) => handleNewGame(newDiff)}
+          onUseHint={useHint}
+        />
 
-          {/* Interactive Companion & Control Sidebar */}
-          <div className="sidebar-section">
-            {/* Mochi the Cat Companion & Live Situational Review */}
-            <CatCompanion
-              emotion={emotion}
-              dialogue={dialogue}
-              isTalking={isTalking}
-              onPet={petCat}
-            />
+        {/* Center Game Play Area: Board + Right Controls Panel */}
+        <div className="game-play-area">
+          {/* Sudoku Board with Peeking Kitten */}
+          <Board
+            board={currentBoard}
+            initialBoard={initialBoard}
+            notes={notes}
+            selectedCell={selectedCell}
+            conflicts={conflicts}
+            onSelectCell={handleCellSelect}
+            kittenEmotion={emotion}
+            kittenDialogue={dialogue}
+            isTalking={isTalking}
+            onPetKitten={petCat}
+          />
 
-            {/* Game Controls & Timer (Market Standard Layout) */}
-            <Controls
-              difficulty={difficulty}
-              timerDisplay={formattedTime}
-              canUndo={canUndo}
-              onNewGame={handleNewGame}
-              onSolve={solveGame}
-              onUndo={undo}
-            />
-
-            {/* Touch/Click Keypad */}
-            <Numpad
-              remainingCounts={remainingCounts}
-              notesMode={notesMode}
-              onInputDigit={inputDigit}
-              onErase={eraseCell}
-              onToggleNotesMode={() => setNotesMode(prev => !prev)}
-            />
-          </div>
+          {/* Right Control & Keypad Panel */}
+          <Controls
+            filledCount={filledCount}
+            totalCells={totalCells}
+            selectedDigit={selectedDigit}
+            onInputDigit={inputDigit}
+            onErase={eraseCell}
+            onReset={resetGame}
+            onNewGame={() => handleNewGame(difficulty)}
+          />
         </div>
       </main>
+
+      {/* Telegram Stickers Management Modal */}
+      <StickersModal
+        isOpen={isStickersModalOpen}
+        onClose={() => setIsStickersModalOpen(false)}
+      />
 
       {/* Victory Celebration Modal */}
       <StatsModal

@@ -1,11 +1,101 @@
-/* Sudoku Board Card & Grid */
+/* Board Section & Peeking Kitten */
 
-.sudoku-board-card {
+.board-outer-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Peeking Kitten Perched at the Top of the Board */
+.peeking-kitten-container {
+  position: absolute;
+  top: -54px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.kitten-perch-body {
+  width: 82px;
+  height: 68px;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: flex-end;
+}
+
+.kitten-perch-body:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+.kitten-perch-body:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.kitten-sticker-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  animation: kitten-peek-bob 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes kitten-peek-bob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
+}
+
+/* Speech Bubble next to kitten */
+.kitten-bubble {
   background: #FFFFFF;
-  padding: 12px;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  display: inline-block;
+  color: #0F172A;
+  padding: 6px 14px;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.82rem;
+  font-weight: 700;
+  position: relative;
+  margin-bottom: 24px;
+  pointer-events: auto;
+  white-space: nowrap;
+  animation: bubble-fade 0.25s ease-out;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Bubble speech pointer */
+.kitten-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: -6px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 7px solid #FFFFFF;
+}
+
+.bubble-text {
+  color: #0F172A;
+}
+
+@keyframes bubble-fade {
+  from { opacity: 0; transform: scale(0.9) translateY(4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* 9x9 Sudoku Board Frame */
+.sudoku-board-card {
+  background: #090E1A;
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .sudoku-grid {
@@ -14,88 +104,84 @@
   grid-template-rows: repeat(9, 1fr);
   width: min(85vw, 440px);
   height: min(85vw, 440px);
-  border: 3px solid var(--border-dark);
-  background-color: var(--border-dark);
+  border: 2.5px solid var(--border-subgrid);
+  background-color: var(--border-grid);
   gap: 1px;
+  border-radius: 14px;
+  overflow: hidden;
   user-select: none;
 }
 
 /* Individual Cell */
 .sudoku-cell {
-  background-color: #FFFFFF;
+  background-color: var(--bg-cell);
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: inherit;
-  font-size: 1.55rem;
+  font-size: 1.6rem;
   font-weight: 600;
-  color: var(--text-main);
+  color: var(--text-white);
   cursor: pointer;
   padding: 0;
   position: relative;
-  transition: background-color 0.12s ease, transform 0.08s ease;
   outline: none;
+  transition: background-color 0.12s ease;
 }
 
 .sudoku-cell:hover {
-  background-color: #F1F5F9;
+  background-color: #15223D;
 }
 
-/* 3x3 Subgrid Box Boundaries */
+/* 3x3 Subgrid Box Boundaries (Electric Blue) */
 .box-border-right {
-  border-right: 3px solid var(--border-dark) !important;
+  border-right: 2.5px solid var(--border-subgrid) !important;
 }
 
 .box-border-bottom {
-  border-bottom: 3px solid var(--border-dark) !important;
+  border-bottom: 2.5px solid var(--border-subgrid) !important;
 }
 
-/* Initial Puzzle Clues */
+/* Given Initial Clues */
 .cell-initial {
-  color: #0F172A;
+  color: #F8FAFC;
   font-weight: 800;
 }
 
-/* User Placed Numbers */
+/* Player Placed Numbers */
 .cell-user {
-  color: var(--primary);
+  color: #93C5FD;
   font-weight: 700;
 }
 
-/* Crosshair Highlight (Same Row, Column, or 3x3 Box) */
+/* Crosshair Highlight */
 .cell-highlighted {
-  background-color: var(--cell-highlight);
+  background-color: #131E35;
 }
 
-/* Same Matching Number Highlight */
+/* Matching Numbers Highlight */
 .cell-same-number {
-  background-color: var(--cell-same);
-  color: #1E40AF;
+  background-color: #1E2D4E;
+  color: #60A5FA;
   font-weight: 800;
 }
 
-/* Active Selected Cell */
+/* Active Selected Cell (Glowing Border) */
 .cell-selected {
-  background-color: var(--cell-selected) !important;
+  background-color: #1A284A !important;
+  box-shadow: inset 0 0 0 2px var(--electric-blue);
   color: #FFFFFF !important;
-  transform: scale(0.98);
 }
 
-/* Conflict Duplicate Cell */
+/* Conflict Cell */
 .cell-conflict {
-  background-color: var(--cell-conflict) !important;
-  color: var(--conflict-text) !important;
-  animation: cell-shake 0.3s ease-in-out;
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  color: #F87171 !important;
+  box-shadow: inset 0 0 0 2px #EF4444;
 }
 
-@keyframes cell-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  75% { transform: translateX(3px); }
-}
-
-/* Pencil Marks 3x3 Miniature Notes Grid */
+/* Pencil Notes */
 .cell-notes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -115,6 +201,23 @@
   line-height: 1;
 }
 
-.note-visible {
-  visibility: visible;
+/* Bottom Motivational Caption */
+.board-bottom-caption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.5rem;
+}
+
+.caption-text {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.02em;
+}
+
+.caption-ray {
+  color: var(--accent-yellow);
+  font-size: 0.95rem;
+  font-weight: 800;
 }

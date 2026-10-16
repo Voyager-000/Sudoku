@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none">
+  <!-- Celebrate Kitten with Party Hat and Sparkles -->
+  <g id="kitten-celebrate">
+    <!-- Party Hat -->
+    <polygon points="60,6 48,28 72,28" fill="#6366F1" stroke="#4338CA" stroke-width="1.5"/>
+    <circle cx="60" cy="5" r="4" fill="#FBBF24"/>
+    <line x1="53" y1="18" x2="67" y2="18" stroke="#FBBF24" stroke-width="2"/>
+
+    <!-- Fluffy Ears -->
+    <path d="M 28 42 L 34 10 L 52 26 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+    <path d="M 33 38 L 38 16 L 49 26 Z" fill="#FDA4AF"/>
+    <path d="M 92 42 L 86 10 L 68 26 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+    <path d="M 87 38 L 82 16 L 71 26 Z" fill="#FDA4AF"/>
+
+    <!-- Head -->
+    <ellipse cx="60" cy="52" rx="36" ry="30" fill="#E2E8F0" stroke="#475569" stroke-width="2"/>
+
+    <!-- Sparkle / Star Eyes -->
+    <polygon points="44,40 46,45 51,46 47,48 48,53 44,50 40,53 41,48 37,46 42,45" fill="#F59E0B"/>
+    <polygon points="76,40 78,45 83,46 79,48 80,53 76,50 72,53 73,48 69,46 74,45" fill="#F59E0B"/>
+
+    <!-- Big Happy Grin -->
+    <polygon points="58,56 62,56 60,59" fill="#FB7185"/>
+    <path d="M 53 60 Q 60 70 67 60 Z" fill="#FB7185" stroke="#475569" stroke-width="1.8"/>
+
+    <!-- Rosy Cheeks -->
+    <ellipse cx="34" cy="56" rx="5" ry="3.5" fill="#FDA4AF" opacity="0.8"/>
+    <ellipse cx="86" cy="56" rx="5" ry="3.5" fill="#FDA4AF" opacity="0.8"/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="58" x2="10" y2="54" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="28" y1="62" x2="12" y2="64" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="92" y1="58" x2="110" y2="54" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="92" y1="62" x2="108" y2="64" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Paws on Board with Stars -->
+    <ellipse cx="38" cy="80" rx="9" ry="7" fill="#F8FAFC" stroke="#475569" stroke-width="2"/>
+    <ellipse cx="82" cy="80" rx="9" ry="7" fill="#F8FAFC" stroke="#475569" stroke-width="2"/>
+  </g>
+</svg>

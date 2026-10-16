@@ -48,6 +48,20 @@ Returns an evaluation report object:
 }
 ```
 
+---
+
+## 🖼️ Telegram Sticker Integration
+
+The companion mascot is designed to support custom Telegram sticker packs:
+- Stickers are stored in `public/stickers/`:
+  - `idle.svg` / `idle.webp` / `idle.png`
+  - `thinking.svg` / `thinking.webp` / `thinking.png`
+  - `happy.svg` / `happy.webp` / `happy.png`
+  - `shocked.svg` / `shocked.webp` / `shocked.png`
+  - `celebrate.svg` / `celebrate.webp` / `celebrate.png`
+- The `src/engine/stickers.js` resolver dynamically maps each emotional state to the appropriate sticker image.
+- Contributors can easily drop custom WebP or PNG stickers into `public/stickers/` to customize the mascot!
+
 ### Student Contribution Ideas
 Students can easily contribute by:
 1. Adding new situational dialogue lines in `src/engine/catDialogues.js`.

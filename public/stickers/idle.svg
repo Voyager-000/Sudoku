@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none">
+  <!-- Fluffy Tabby Kitten Peeking Over Border -->
+  <g id="kitten-idle">
+    <!-- Fluffy Ears -->
+    <path d="M 28 42 L 34 10 L 52 26 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+    <path d="M 33 38 L 38 16 L 49 26 Z" fill="#FDA4AF"/>
+    <path d="M 92 42 L 86 10 L 68 26 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+    <path d="M 87 38 L 82 16 L 71 26 Z" fill="#FDA4AF"/>
+
+    <!-- Head & Cheeks -->
+    <ellipse cx="60" cy="50" rx="36" ry="30" fill="#E2E8F0" stroke="#475569" stroke-width="2"/>
+    <!-- Tabby Stripes on Head -->
+    <path d="M 54 22 L 56 34" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 60 20 L 60 35" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 66 22 L 64 34" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
+    <!-- Cheek fluff & stripes -->
+    <path d="M 30 46 L 38 48" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 28 53 L 37 54" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 90 46 L 82 48" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 92 53 L 83 54" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Eyes (Big Cute Kitten Eyes) -->
+    <ellipse cx="44" cy="48" rx="7" ry="8" fill="#1E293B"/>
+    <circle cx="42" cy="45" r="2.8" fill="#FFFFFF"/>
+    <circle cx="46" cy="51" r="1.4" fill="#FFFFFF"/>
+    <ellipse cx="76" cy="48" rx="7" ry="8" fill="#1E293B"/>
+    <circle cx="74" cy="45" r="2.8" fill="#FFFFFF"/>
+    <circle cx="78" cy="51" r="1.4" fill="#FFFFFF"/>
+
+    <!-- Cute Nose & Mouth -->
+    <polygon points="58,56 62,56 60,59" fill="#FB7185"/>
+    <path d="M 55 60 Q 58 63 60 60 Q 62 63 65 60" stroke="#475569" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- Whiskers -->
+    <line x1="28" y1="56" x2="10" y2="52" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="28" y1="60" x2="12" y2="62" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="92" y1="56" x2="110" y2="52" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="92" y1="60" x2="108" y2="62" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Paws Resting Over the Border -->
+    <ellipse cx="38" cy="80" rx="9" ry="7" fill="#F8FAFC" stroke="#475569" stroke-width="2"/>
+    <line x1="34" y1="78" x2="34" y2="84" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="38" y1="77" x2="38" y2="85" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="42" y1="78" x2="42" y2="84" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+
+    <ellipse cx="82" cy="80" rx="9" ry="7" fill="#F8FAFC" stroke="#475569" stroke-width="2"/>
+    <line x1="78" y1="78" x2="78" y2="84" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="82" y1="77" x2="82" y2="85" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="86" y1="78" x2="86" y2="84" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>
