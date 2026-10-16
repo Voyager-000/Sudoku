@@ -9,31 +9,36 @@ Tailored specifically for [Voyager-000/Sudoku](https://github.com/Voyager-000/Su
 ```text
 sudoku/
 ├── public/
-│   └── favicon.svg
+│   ├── favicon.svg
+│   └── cat/                 # Vector/SVG cat emotion assets
 ├── src/
-│   ├── assets/              # Icons, audio effects
+│   ├── assets/              # Icons, sounds
 │   ├── engine/              # Pure logic & algorithms (Framework-agnostic)
 │   │   ├── constants.js     # Grid dimensions, difficulty presets
 │   │   ├── validator.js     # Row, column, 3x3 box & conflict checks
 │   │   ├── solver.js        # Backtracking solver with MRV heuristic
 │   │   ├── generator.js     # Board generator & unique solution hole-digger
+│   │   ├── evaluator.js     # Situational review & move quality evaluator
 │   │   └── hints.js         # Logical deduction hints (Naked single, etc.)
 │   ├── hooks/               # Custom React hooks
 │   │   ├── useSudoku.js     # Game state, board data, history stack
+│   │   ├── useCatEmotion.js # Cat state machine & speech bubble reactions
 │   │   ├── useTimer.js      # Game timer & pause/resume
 │   │   └── useKeyboard.js   # Numpad & arrow key navigation
 │   ├── components/
-│   │   ├── Header.jsx       # Title, difficulty selector, theme toggle
+│   │   ├── Header.jsx       # Title, difficulty selector, GitHub link
 │   │   ├── Board.jsx        # 9x9 Grid layout with 3x3 box borders
 │   │   ├── Cell.jsx         # Single cell with value & 3x3 pencil marks
+│   │   ├── CatCompanion.jsx # Animated reactive Cat (emotions, dialogue box)
 │   │   ├── Controls.jsx     # Undo, Erase, Notes toggle, Hint, New Game
 │   │   ├── Numpad.jsx       # 1-9 touch & click keypad with remaining counts
 │   │   ├── StatsModal.jsx   # Victory modal with confetti & game stats
 │   │   └── Timer.jsx        # Elapsed time display
 │   ├── styles/
-│   │   ├── index.css        # Design tokens, CSS variables, typography
+│   │   ├── index.css        # Design tokens, modern periwinkle palette, typography
 │   │   ├── board.css        # Grid styles, crosshairs, animations
-│   │   └── controls.css     # Buttons, keypad, glassmorphic panels
+│   │   ├── cat.css          # Cat companion, dialogue bubble, emotion animations
+│   │   └── controls.css     # Buttons, keypad, modern cards
 │   ├── App.jsx              # Main application shell
 │   └── main.jsx             # React DOM entry
 ├── package.json
@@ -125,33 +130,39 @@ We will implement this in **6 manageable, sequential parts**. After each part, w
 
 ---
 
-### 🔹 Part 5: Smart Hint System & Logical Explanations
-> **Goal**: Build educational, tiered hints that help players learn techniques rather than just filling answers.
+### 🔹 Part 5: "Mochi the Cat" Companion & Situational Reviewer
+> **Goal**: Create an interactive animated companion inspired by Chess.com bots that monitors the game situation, reacts dynamically to good/bad moves, and offers live review commentary.
 
-1. **Hint Deduction Engine (`hints.js`)**:
-   - **Naked Single**: A cell where only one number is legally possible.
-   - **Hidden Single**: A number that can only fit in one specific cell within a row, col, or box.
-2. **Tiered Hint Flow**:
-   - Step 1: Spotlight the cell that has a logical next step.
-   - Step 2: Display educational explanation text (e.g., *"In row 4, '7' can only go in this box"*).
-   - Step 3 (Optional): Fill the cell for the player.
-3. **Mistakes Tracker**:
-   - Option for 3-strikes challenge or Relaxed/Zen mode.
+1. **Situational Review Engine (`src/engine/evaluator.js`)**:
+   - Evaluates player moves against constraints and the puzzle solution.
+   - Categorizes moves into:
+     - 🌟 **Brilliant / Key Move**: Finding a single candidate cell or completing a tricky sector.
+     - 👍 **Solid Move**: Valid, correct placement that advances completion.
+     - ⚠️ **Oops / Inaccuracy**: Duplicate number or placement violating row/col/box rules.
+     - 🐾 **Milestone**: Completed row, column, or 3×3 block.
+   - Game review evaluation: Calculates % completed and streak.
+2. **Cat State Machine (`useCatEmotion.js`)**:
+   - Emotional states: `idle`, `thinking`, `happy`, `shocked`, `cheering`, `celebrating`.
+   - Dynamic contextual dialogue pool (encouraging, witty, and educational).
+3. **`<CatCompanion />` UI Component**:
+   - Expressive vector/SVG animated cat companion perched beside controls.
+   - Responsive speech bubble with live situational commentary.
+   - Interactive: clicking/hovering Mochi prompts playful reactions.
 
 ---
 
-### 🔹 Part 6: Animations, Sound, Victory Modal & Open-Source Polish
-> **Goal**: Final presentation polish, victory celebration, and contributor readiness.
+### 🔹 Part 6: Smart Hints, Audio, Victory Modal & Open-Source Polish
+> **Goal**: Tiered educational hints, tactile audio, confetti celebration, and contributor readiness.
 
-1. **Victory Experience**:
-   - Win detection triggering canvas confetti celebration.
-   - `<StatsModal />`: Time taken, difficulty, hints used, and personal best records.
-2. **Micro-interactions & Audio**:
-   - Pop animations when placing numbers and completed row/col flash effect.
-   - Web Audio API subtle tactile click sounds (with mute toggle).
+1. **Smart Tiered Hints (`hints.js`)**:
+   - **Naked Single** & **Hidden Single** step-by-step guidance.
+   - Companion explains the exact logic instead of just spoiling the answer.
+2. **Audio & Celebration**:
+   - Confetti burst on win with cat wearing a victory party hat.
+   - Subtle tactile Web Audio clicks (with toggle to mute).
+   - `<StatsModal />` with time taken, difficulty, accuracy, and personal records.
 3. **Open-Source Readiness (Sudoku Open Lab)**:
-   - Well-structured `CONTRIBUTING.md`.
-   - Clean, documented code with JSDoc comments to make it effortless for students to pick up issues.
+   - Well-documented code with JSDoc comments to make it effortless for students to pick up issues.
 
 ---
 
