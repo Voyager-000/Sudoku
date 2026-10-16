@@ -113,6 +113,7 @@ body {
   cursor: pointer;
   transition: all 0.18s ease;
   text-align: left;
+  text-decoration: none;
 }
 
 .nav-item:hover {
@@ -157,8 +158,8 @@ body {
 .top-stats-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
   width: 100%;
 }
 

@@ -5,17 +5,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 56px; /* Dedicated headroom for Coach Mochi and speech bubble */
 }
 
 /* Peeking Kitten Perched at the Top of the Board */
 .peeking-kitten-container {
   position: absolute;
   top: -54px;
-  left: 20px;
+  left: 18px;
   z-index: 10;
   display: flex;
   align-items: flex-end;
-  gap: 8px;
+  gap: 10px;
   pointer-events: none;
 }
 

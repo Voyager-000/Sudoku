@@ -1,6 +1,8 @@
 import React from 'react';
 
 export function Controls({
+  difficulty,
+  onChangeDifficulty,
   filledCount,
   totalCells,
   selectedDigit,
@@ -14,11 +16,30 @@ export function Controls({
   onNewGame
 }) {
   const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const difficulties = [
+    { id: 'easy', label: 'Easy' },
+    { id: 'medium', label: 'Medium' },
+    { id: 'hard', label: 'Hard' }
+  ];
   const progressPercent = Math.min(100, Math.round((filledCount / totalCells) * 100));
 
   return (
     <div className="right-panel-card">
-      {/* 3x3 Keypad (1 to 9) */}
+      {/* 1. Difficulty Segmented Selector (Relocated here for clean zero-overlap layout) */}
+      <div className="panel-difficulty-bar" role="group" aria-label="Sudoku Difficulty">
+        {difficulties.map(d => (
+          <button
+            key={d.id}
+            type="button"
+            className={`panel-diff-btn ${difficulty === d.id ? 'panel-diff-active' : ''}`}
+            onClick={() => onChangeDifficulty(d.id)}
+          >
+            {d.label}
+          </button>
+        ))}
+      </div>
+
+      {/* 2. 3x3 Keypad (1 to 9) */}
       <div className="dark-keypad-grid">
         {digits.map(num => (
           <button
@@ -33,7 +54,7 @@ export function Controls({
         ))}
       </div>
 
-      {/* Action Grid: Undo, Notes, Erase, Reset */}
+      {/* 3. Action Grid: Undo, Notes, Erase, Reset */}
       <div className="keypad-actions-grid">
         {/* Undo Button */}
         <button
@@ -94,7 +115,7 @@ export function Controls({
         </button>
       </div>
 
-      {/* Prominent "New Game" Button with Play Icon */}
+      {/* 4. Prominent "New Game" Button with Play Icon */}
       <button
         type="button"
         className="new-game-play-btn"
@@ -106,7 +127,7 @@ export function Controls({
         <span>New Game</span>
       </button>
 
-      {/* Your Progress Section */}
+      {/* 5. Your Progress Section */}
       <div className="progress-section-card">
         <div className="progress-header">
           <span className="progress-title">Your Progress</span>
@@ -121,7 +142,7 @@ export function Controls({
         </div>
       </div>
 
-      {/* Tip Box with Paw Watermark */}
+      {/* 6. Tip Box with Paw Watermark */}
       <div className="tip-box-card">
         <div className="tip-icon-wrapper">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" strokeWidth="2">
@@ -140,3 +161,5 @@ export function Controls({
     </div>
   );
 }
+
+export default Controls;

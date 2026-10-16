@@ -64,6 +64,18 @@ export function Sidebar({ onNewGame, onOpenStickers, onOpenSettings, onOpenAbout
           <span className="nav-icon">ℹ</span>
           <span>About</span>
         </button>
+
+        <a
+          id="sidebar-nav-github"
+          href="https://github.com/Voyager-000/Sudoku"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-item nav-item-link"
+          title="Open GitHub Repository (Voyager-000/Sudoku)"
+        >
+          <span className="nav-icon">🐙</span>
+          <span>GitHub</span>
+        </a>
       </nav>
 
       {/* Playful Handwritten Quote at bottom */}

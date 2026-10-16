@@ -136,12 +136,10 @@ export function App() {
       <main className="main-content-viewport">
         {/* Top Stats Bar */}
         <TopBar
-          difficulty={difficulty}
           timerDisplay={formattedTime}
           filledCount={filledCount}
           totalCells={totalCells}
           hintsRemaining={hintsRemaining}
-          onChangeDifficulty={(newDiff) => handleNewGame(newDiff)}
           onUseHint={handleUseHint}
         />
 
@@ -165,6 +163,8 @@ export function App() {
 
           {/* Right Control & Keypad Panel */}
           <Controls
+            difficulty={difficulty}
+            onChangeDifficulty={(newDiff) => handleNewGame(newDiff)}
             filledCount={filledCount}
             totalCells={totalCells}
             selectedDigit={selectedDigit}
