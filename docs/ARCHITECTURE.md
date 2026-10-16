@@ -109,6 +109,8 @@ Every engine module in `src/engine/` is accompanied by automated unit tests:
 
 ---
 
-## 📚 Further Reading
+## 📚 Further Reading & Module Guides
 
 - [Module 1: Core Engine Implementation Guide](./modules/01-core-engine.md)
+- [Module 2: Coach Mochi Cat Companion & Situational Reviewer](./modules/02-cat-companion.md)
+- [Module 3: UI Architecture, Styling & Keyboard Controls](./modules/03-ui-and-interactions.md)
