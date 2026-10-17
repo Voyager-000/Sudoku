@@ -97,6 +97,10 @@ export function AboutModal({ isOpen, onClose }) {
             <h3 className="about-section-title">📚 Documentation Guides</h3>
             <div className="about-links-grid">
               <div className="about-link-chip">
+                <span className="chip-badge">Issues</span>
+                <span className="chip-name">GOOD_FIRST_ISSUES.md</span>
+              </div>
+              <div className="about-link-chip">
                 <span className="chip-badge">Architecture</span>
                 <span className="chip-name">docs/ARCHITECTURE.md</span>
               </div>
@@ -118,8 +122,9 @@ export function AboutModal({ isOpen, onClose }) {
           <div className="about-section">
             <h3 className="about-section-title">🚀 How to Contribute</h3>
             <p className="about-text">
-              Check out <code>CONTRIBUTING.md</code> in the repository. Fork the repository, create a
-              feature branch, write clean tests with Vitest, and submit a Pull Request!
+              Check out <code>GOOD_FIRST_ISSUES.md</code> and <code>CONTRIBUTING.md</code> in the repository.
+              Fork the repository, pick a beginner-friendly issue, write clean tests with Vitest, and submit a Pull Request!
+              The source code is 100% free and open-source under the <strong>GNU General Public License v3.0 (GPLv3)</strong>.
             </p>
           </div>
         </div>

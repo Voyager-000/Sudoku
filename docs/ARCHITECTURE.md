@@ -1,6 +1,12 @@
 # 🏛️ Sudoku Open Lab — System Architecture
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-openlabsudoku.vercel.app-5468FF?style=flat-square&logo=vercel)](https://openlabsudoku.vercel.app/)
+[![Repository](https://img.shields.io/badge/GitHub-Voyager--000%2FSudoku-181717?style=flat-square&logo=github)](https://github.com/Voyager-000/Sudoku)
+
 This document provides a comprehensive technical overview of the architecture, data models, and design patterns used in **Sudoku Open Lab**. It is written to help students and new contributors understand how the application works under the hood.
+
+- **Live Application**: [https://openlabsudoku.vercel.app/](https://openlabsudoku.vercel.app/)
+- **Source Code**: [https://github.com/Voyager-000/Sudoku](https://github.com/Voyager-000/Sudoku)
 
 ---
 

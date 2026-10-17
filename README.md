@@ -1,7 +1,8 @@
 # Sudoku Open Lab 🧩🐾
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-openlabsudoku.vercel.app-5468FF?style=for-the-badge&logo=vercel)](https://openlabsudoku.vercel.app/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](https://www.gnu.org/licenses/gpl-3.0)
+[![Good First Issues](https://img.shields.io/badge/Good%20First%20Issues-13%20Available-brightgreen?style=for-the-badge)](GOOD_FIRST_ISSUES.md)
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Vitest](https://img.shields.io/badge/Tests-Passing-10B981?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
@@ -10,7 +11,8 @@
 > Designed for college students and first-time contributors to learn clean modular software architecture, algorithm design, reactive UI state management, and collaborative Git contribution workflows.
 
 🎮 **[Play Live Now: openlabsudoku.vercel.app](https://openlabsudoku.vercel.app/)**  
-🐙 **[GitHub Repository: Voyager-000/Sudoku](https://github.com/Voyager-000/Sudoku)**
+🐙 **[GitHub Repository: Voyager-000/Sudoku](https://github.com/Voyager-000/Sudoku)**  
+🎯 **[Student Contribution Roadmap: GOOD_FIRST_ISSUES.md](GOOD_FIRST_ISSUES.md)**
 
 ---
 
@@ -126,25 +128,28 @@ npm run build
 
 ## 📚 Documentation for Students
 
-Comprehensive guides are available in the [`docs/`](docs/) directory:
-- [System Architecture](docs/ARCHITECTURE.md)
-- [Module 01: Core Engine & Solver Algorithm](docs/modules/01-core-engine.md)
-- [Module 02: Coach Mochi & Telegram Stickers](docs/modules/02-cat-companion.md)
-- [Module 03: UI System & Keyboard Interactions](docs/modules/03-ui-and-interactions.md)
-- [Contribution Guidelines & Git Workflow](CONTRIBUTING.md)
+Comprehensive guides are available in this repository:
+- 🎯 **[Student Contribution Roadmap & Issues](GOOD_FIRST_ISSUES.md)**
+- 📐 [System Architecture Guide](docs/ARCHITECTURE.md)
+- 🧩 [Module 01: Core Engine & Solver Algorithm](docs/modules/01-core-engine.md)
+- 🐾 [Module 02: Coach Mochi & Telegram Stickers](docs/modules/02-cat-companion.md)
+- ⌨️ [Module 03: UI System & Keyboard Interactions](docs/modules/03-ui-and-interactions.md)
+- 🤝 [Contribution Guidelines & Git Workflow](CONTRIBUTING.md)
 
 ---
 
 ## 🤝 How to Contribute
 
-1. Fork the repository on GitHub: [Voyager-000/Sudoku](https://github.com/Voyager-000/Sudoku).
-2. Create a new feature branch (`git checkout -b feature/my-cool-feature`).
-3. Write clean, tested code and verify with `npm test`.
-4. Commit your changes following conventional commit style (`git commit -m "feat(ui): add volume slider"`).
-5. Push to your fork (`git push origin feature/my-cool-feature`) and submit a Pull Request!
+1. Browse **[GOOD_FIRST_ISSUES.md](GOOD_FIRST_ISSUES.md)** to find a beginner-friendly bug or feature.
+2. Fork the repository on GitHub: [Voyager-000/Sudoku](https://github.com/Voyager-000/Sudoku).
+3. Create a new descriptive branch (`git checkout -b fix/timer-tab-visibility`).
+4. Write clean, tested code and verify with `npm test` and `npm run build`.
+5. Commit your changes following conventional commit style (`git commit -m "fix(timer): pause timer when browser tab is hidden"`).
+6. Push to your fork (`git push origin fix/timer-tab-visibility`) and submit a Pull Request!
 
 ---
 
-## 📄 License
+## 📄 License & Attribution
 
-This project is licensed under the [MIT License](LICENSE).
+- **Source Code**: Licensed under the **[GNU General Public License v3.0 (GPLv3)](LICENSE)**. This ensures that Sudoku Open Lab and any derivative software remain free and open-source forever for educational communities.
+- **Kitten Mascot Stickers**: Third-party Telegram cat sticker graphics included in `public/stickers/` are for non-commercial educational and parody purposes. All copyrights remain with their original creators.

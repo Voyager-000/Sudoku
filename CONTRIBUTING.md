@@ -1,6 +1,12 @@
 # Contributing to Sudoku Open Lab 🧩
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-openlabsudoku.vercel.app-5468FF?style=flat-square&logo=vercel)](https://openlabsudoku.vercel.app/)
+[![Repository](https://img.shields.io/badge/GitHub-Voyager--000%2FSudoku-181717?style=flat-square&logo=github)](https://github.com/Voyager-000/Sudoku)
+
 Welcome to **Sudoku Open Lab**! This project is designed specifically for students and first-time open-source contributors to gain hands-on experience in modern web development, Git workflows, clean architecture, and algorithmic problem solving.
+
+🎮 **Live Web App**: [https://openlabsudoku.vercel.app/](https://openlabsudoku.vercel.app/)  
+🐙 **GitHub Repo**: [https://github.com/Voyager-000/Sudoku](https://github.com/Voyager-000/Sudoku)
 
 Whether you're fixing a typo, adding a new Sudoku solving technique, polishing animations, or improving mobile accessibility, your contributions are warmly welcomed!
 
@@ -27,7 +33,13 @@ We are committed to providing a friendly, supportive, and harassment-free experi
 
 ## 💡 How Can I Contribute?
 
-Look for issues labeled with:
+The easiest way to get started is by checking out our curated **[🎯 Good First Issues & Student Roadmap](GOOD_FIRST_ISSUES.md)**! It contains a curated list of beginner-friendly bugs, UI polish tasks, algorithm puzzles, and unit test challenges complete with:
+- The exact files to inspect
+- Key concepts to learn
+- Acceptance criteria
+- Suggested git branch and commit commands
+
+You can also look for GitHub issues labeled with:
 - `good first issue`: Accessible tasks tailored for beginners (e.g., adding a shortcut, styling tweak, extra unit tests).
 - `documentation`: Improving guides, adding code comments, or writing tutorials for new contributors.
 - `algorithm`: Working on Sudoku puzzle generation, hint heuristics, and backtracking solvers.
