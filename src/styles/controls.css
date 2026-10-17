@@ -578,7 +578,14 @@
   font-family: monospace;
 }
 
-/* GitHub Repository Card Link */
+.about-external-cards-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* GitHub Repository & Live App Card Link */
 .about-github-link-card {
   display: flex;
   align-items: center;

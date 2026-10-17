@@ -2,6 +2,11 @@
   "name": "sudoku-open-lab",
   "private": true,
   "version": "0.1.0",
+  "homepage": "https://openlabsudoku.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Voyager-000/Sudoku.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
